@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Student e-Portfolio of Matric A211477 — Bachelor of Software Engineering. Mobile programming labs and the UpSkill project, inspired by SDG 4: Quality Education." />
+  <title>A211477 — UpSkill e-Portfolio</title>
+  
+  <style>
+    /* ==========================================================================
+       1. CORE DESIGN TOKENS (SDG 4 Inspired Indigo & Tech Blue Theme)
+       ========================================================================== */
+    :root {
+      --primary-900: #101432;
+      --primary-700: #1d2766;
+      --primary-600: #2f45c5;
+      --primary-500: #4361ee;
+      --primary-100: #eef2ff;
+      --accent:      #ff9f1c;
+      --ink:         #0f1224;
+      --muted:       #535875;
+      --bg:          #f8fafc;
+      --card:        #ffffff;
+      --border:      #e2e8f0;
+      --shadow:      0 6px 24px rgba(29, 39, 102, 0.06);
+      --radius:      16px;
+    }
+
+    /* ==========================================================================
+       2. GLOBAL BASE ELEMENTS & RESET RULES
+       ========================================================================== */
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    html { 
+      scroll-behavior: smooth; 
+    }
+    
+    body {      
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;      
+      color: var(--ink);      
+      background: var(--bg);      
+      line-height: 1.65;    
+    }
+    
+    a { 
+      color: var(--primary-700);
+      text-decoration: none;
+    }
+    
+    img { 
+      max-width: 100%; 
+      display: block;
+    }
+
+    /* Layout Structural Container */
+    .container {      
+      width: min(1080px, 92%);      
+      margin-inline: auto;    
+    }
+
+    /* Structural Grid System */
+    .grid-matrix {      
+      display: grid;      
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));      
+      gap: 1.5rem;    
+    }
+
+    @media (max-width: 640px) {      
+      .grid-matrix { grid-template-columns: 1fr; }    
+    }
+
+    /* Accessibility Skip-Link Element */
+    .skip-target {
+      position: absolute;
+      left: -999px;
+      background: var(--accent);
+      color: #351e00;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      z-index: 200;
+    }
+    .skip-target:focus { 
+      left: 1rem; 
+      top: 0.6rem; 
+    }
+
+    /* ==========================================================================
+       3. TOP NAVIGATION LAYOUT BLOCK
+       ========================================================================== */
+    .topnav {      
+      position: sticky;      
+      top: 0;      
+      z-index: 100;      
+      background: rgba(255, 255, 255, 0.92);      
+      backdrop-filter: saturate(180%) blur(10px);      
+      border-bottom: 1px solid var(--border);    
+    }
+    
+    .topnav .inner-bar {      
+      display: flex;      
+      align-items: center;      
+      justify-content: space-between;      
+      gap: 1rem;      
+      padding-block: 0.75rem;    
+    }
+    
+    .brand {      
+      font-weight: 800;      
+      letter-spacing: -0.02em;      
+      color: var(--primary-900);      
+      font-size: 1.05rem;      
+      display: inline-flex;      
+      align-items: center;      
+      gap: 0.5rem;    
+    }
+    
+    .brand .indicator-dot {      
+      width: 12px; 
+      height: 12px;      
+      background: var(--accent);      
+      border-radius: 50%;      
+      box-shadow: 0 0 0 4px var(--primary-100);    
+    }
+    
+    .navlinks {      
+      display: flex;      
+      flex-wrap: wrap;      
+      gap: 0.35rem;      
+      list-style: none;    
+    }
+    
+    .navlinks a {      
+      font-weight: 600;      
+      font-size: 0.92rem;      
+      padding: 0.45rem 0.7rem;      
+      border-radius: 999px;      
+      transition: background 0.18s ease, color 0.18s ease;    
+    }
+    
+    .navlinks a:hover,    
+    .navlinks a:focus-visible {      
+      background: var(--primary-100);      
+      color: var(--primary-900);      
+      outline: none;    
+    }
+
+    /* ==========================================================================
+       4. HERO BANNER PROFILE LAYOUT BLOCK
+       ========================================================================== */
+    .hero {      
+      background:        
+        radial-gradient(1200px 400px at 80% -10%, rgba(255,159,28,0.15), transparent 60%),        
+        linear-gradient(160deg, var(--primary-700), var(--primary-900));      
+      color: #fff;      
+      padding: clamp(3rem, 8vw, 6rem) 0;    
+    }
+    
+    .hero-inner {      
+      display: flex;      
+      align-items: center;      
+      gap: clamp(1.75rem, 4vw, 3.5rem);      
+      flex-wrap: wrap;    
+    }
+    
+    .hero-text { 
+      flex: 1 1 420px; 
+      min-width: 0; 
+    }
+    
+    .hero h1 {      
+      font-size: clamp(2rem, 5vw, 3.2rem);      
+      line-height: 1.1;      
+      margin-bottom: 0.5rem;      
+      letter-spacing: -0.02em;    
+    }
+    
+    .hero .role-specification {      
+      font-size: 1.1rem;      
+      color: #cbd5e1;      
+      font-weight: 600;      
+      margin-bottom: 1.5rem;    
+    }
+    
+    .hero p.intro-paragraph {      
+      max-width: 60ch;      
+      color: #f1f5f9;      
+      font-size: 1.05rem;    
+    }
+    
+    .avatar-frame {      
+      flex: 0 0 auto;      
+      width: clamp(150px, 22vw, 230px);      
+      height: clamp(150px, 22vw, 230px);      
+      border-radius: 50%;      
+      object-fit: cover;      
+      object-position: center 18%;      
+      border: 5px solid rgba(255, 255, 255, 0.9);      
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.32);      
+      background: #fff;    }
+    
+    @media (max-width: 760px) {      
+      .hero-inner { flex-direction: column; text-align: center; }      
+      .avatar-frame { order: -1; }      
+      .hero p.intro-paragraph { margin-inline: auto; }      
+      .sdg-education-badge { text-align: left; }    
+    }
+
+    /* Internal Metadata Matrix Grid */
+    .meta-layout-grid {      
+      display: grid;      
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));      
+      gap: 0.75rem;      
+      margin-top: 2rem;    
+    }
+    
+    .meta-layout-grid .meta-card-item {      
+      background: rgba(255,255,255,0.08);      
+      border: 1px solid rgba(255,255,255,0.18);      
+      border-radius: 12px;      
+      padding: 0.85rem 1rem;    
+    }
+    
+    .meta-layout-grid .meta-label-tag {      
+      display: block;      
+      font-size: 0.72rem;      
+      text-transform: uppercase;      
+      letter-spacing: 0.08em;      
+      color: #cbd5e1;      
+      margin-bottom: 0.15rem;    
+    }
+    
+    .meta-layout-grid .meta-value-content { 
+      font-weight: 700; 
+    }
+
+    /* Global SDG Identifier Component */
+    .sdg-education-badge {      
+      display: inline-flex;      
+      align-items: center;      
+      gap: 0.6rem;      
+      margin-top: 1.75rem;      
+      background: var(--accent);      
+      color: #351e00;      
+      font-weight: 800;      
+      padding: 0.6rem 1rem;      
+      border-radius: 999px;      
+      box-shadow: var(--shadow);    
+    }
+    
+    .sdg-education-badge .sdg-index-num {      
+      background: #351e00;      
+      color: var(--accent);      
+      width: 30px; 
+      height: 30px;      
+      border-radius: 8px;      
+      display: grid; 
+      place-items: center;      
+      font-size: 0.95rem;    
+    }
+
+    /* ==========================================================================
+       5. CONTENT SECTIONS LAYOUT SCHEMATIC
+       ========================================================================== */
+    section { 
+      padding: clamp(3rem, 6vw, 4.5rem) 0; 
+      scroll-margin-top: 80px; 
+    }
+    
+    section:nth-of-type(even) { 
+      background: #fff; 
+    }
+
+    .section-header-block { 
+      margin-bottom: 2rem; 
+    }
+    
+    .section-header-block .eyebrow-text {      
+      text-transform: uppercase;      
+      letter-spacing: 0.12em;      
+      font-size: 0.78rem;      
+      font-weight: 700;      
+      color: var(--primary-600);    
+    }
+    
+    .section-header-block h2 {      
+      font-size: clamp(1.6rem, 4vw, 2.2rem);      
+      margin: 0.25rem 0 0.5rem;      
+      letter-spacing: -0.02em;      
+      color: var(--primary-900);    
+    }
+    
+    .section-header-block p { 
+      color: var(--muted); 
+      max-width: 65ch; 
+    }
+
+    /* ==========================================================================
+       6. COMPONENT CARDS & MEDIA WRAPPERS
+       ========================================================================== */
+    .showcase-card {      
+      background: var(--card);      
+      border: 1px solid var(--border);      
+      border-radius: var(--radius);      
+      box-shadow: var(--shadow);      
+      overflow: hidden;      
+      display: flex;      
+      flex-direction: column;      
+      transition: transform 0.2s ease, box-shadow 0.2s ease;    
+    }
+    
+    .showcase-card:hover {      
+      transform: translateY(-5px);      
+      box-shadow: 0 18px 40px rgba(29, 39, 102, 0.12);    
+    }
+    
+    .showcase-card .card-body-content {      
+      padding: 1.3rem 1.4rem 1.45rem;      
+      display: flex;      
+      flex-direction: column;      
+      gap: 0.65rem;      
+      flex: 1 1 auto;    
+    }
+    
+    .showcase-card .category-pill-tag {      
+      align-self: flex-start;      
+      background: var(--primary-100);      
+      color: var(--primary-700);      
+      font-size: 0.72rem;      
+      font-weight: 700;      
+      letter-spacing: 0.04em;      
+      text-transform: uppercase;      
+      padding: 0.25rem 0.6rem;      
+      border-radius: 999px;    
+    }
+    
+    .showcase-card h3 { 
+      font-size: 1.2rem; 
+      color: var(--primary-900); 
+    }
+    
+    .showcase-card .description-text { 
+      color: var(--muted); 
+      font-size: 0.96rem; 
+    }
+    
+    .showcase-card .reflection-callout-block {      
+      background: var(--primary-100);      
+      border-left: 4px solid var(--primary-500);      
+      border-radius: 0 10px 10px 0;      
+      padding: 0.7rem 0.9rem;      
+      font-size: 0.92rem;      
+      color: var(--ink);    
+    }
+    
+    .showcase-card .reflection-callout-block strong { 
+      color: var(--primary-700); 
+    }
+
+    /* Responsive 16:9 HD Embedded Player Blueprint */
+    .video-aspect-wrapper {      
+      position: relative;      
+      width: 100%;      
+      padding-top: 56.25%;      
+      background: #0c0e1f;    
+    }
+    
+    .video-aspect-wrapper iframe {      
+      position: absolute;      
+      inset: 0;      
+      width: 100%;      
+      height: 100%;      
+      border: 0;    
+    }
+
+    /* Graphical Interface Visual Frame Block */
+    .ui-screenshot-frame {      
+      margin: 0;      
+      border: 1px solid var(--border);      
+      border-radius: 12px;      
+      overflow: hidden;      
+      background: #fff;    
+    }
+    
+    .ui-screenshot-frame .image-centering-well {      
+      background: linear-gradient(160deg, var(--primary-100), #f1f5f9);      
+      display: flex;      
+      align-items: center;      
+      justify-content: center;      
+      padding: 1rem;      
+      height: 300px;    
+    }
+    
+    .ui-screenshot-frame .image-centering-well img {      
+      max-height: 100%;      
+      max-width: 68%;      
+      width: auto;      
+      border-radius: 10px;      
+      box-shadow: 0 10px 26px rgba(29, 39, 102, 0.15);    
+    }
+    
+    .ui-screenshot-frame figcaption {      
+      font-size: 0.82rem;      
+      color: var(--muted);      
+      padding: 0.55rem 0.8rem;      
+      border-top: 1px solid var(--border);    
+    }
+    
+    .ui-screenshot-frame figcaption strong { 
+      color: var(--primary-700); 
+    }
+
+    /* Universal Functional Trigger Element */
+    .btn-action {      
+      align-self: flex-start;      
+      display: inline-flex;      
+      align-items: center;      
+      gap: 0.5rem;      
+      margin-top: auto;      
+      background: var(--primary-700);      
+      color: #fff;      
+      font-weight: 700;      
+      font-size: 0.92rem;      
+      padding: 0.6rem 1.05rem;      
+      border-radius: 10px;      
+      transition: background 0.18s ease, transform 0.12s ease;    
+    }
+    .btn-action:hover, 
+    .btn-action:focus-visible { 
+      background: var(--primary-900); 
+      transform: translateY(-1px); 
+      outline: none; 
+    }
+    .btn-action svg { 
+      width: 18px; 
+      height: 18px; 
+      fill: currentColor; 
+    }
+
+    /* ==========================================================================
+       7. META COMPONENTS (CHIPS, PROSE WELLS & LIST GROUPS)
+       ========================================================================== */
+    .skills-chip-cloud { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 0.6rem; 
+    }
+    
+    .skills-chip-cloud .chip-item {      
+      background: #fff;      
+      border: 1px solid var(--border);      
+      color: var(--primary-900);      
+      font-weight: 600;      
+      padding: 0.5rem 0.95rem;      
+      border-radius: 999px;      
+      box-shadow: 0 2px 8px rgba(29,39,102,0.04);      
+      font-size: 0.92rem;    
+    }
+
+    .prose-reading-well {      
+      background: var(--card);      
+      border: 1px solid var(--border);      
+      border-radius: var(--radius);      
+      padding: 1.75rem;      
+      box-shadow: var(--shadow);      
+      max-width: 75ch;    
+    }
+    .prose-reading-well p { 
+      margin-bottom: 1rem; 
+    }
+    .prose-reading-well p:last-child { 
+      margin-bottom: 0; 
+    }
+
+    .documentation-reference-list { 
+      list-style: none; 
+      display: grid; 
+      gap: 0.75rem; 
+      max-width: 75ch; 
+    }
+    
+    .documentation-reference-list li {      
+      background: var(--card);      
+      border: 1px solid var(--border);      
+      border-radius: 12px;      
+      padding: 0.85rem 1.1rem;      
+      box-shadow: 0 2px 8px rgba(29,39,102,0.04);    
+    }
+    
+    .documentation-reference-list li strong { 
+      color: var(--primary-700); 
+    }
+
+    /* ==========================================================================
+       8. SYSTEM FOOTER WRAPPER BLOCK
+       ========================================================================== */
+    .system-footer {      
+      background: var(--primary-900);      
+      color: #cbd5e1;      
+      text-align: center;      
+      padding: 2.25rem 0;    
+    }
+    
+    .system-footer .institutional-identity { 
+      font-weight: 800; 
+      color: #fff; 
+      font-size: 1.05rem; 
+    }
+    
+    .system-footer .departmental-attribution { 
+      font-size: 0.88rem; 
+      color: #94a3b8; 
+      margin-top: 0.35rem; 
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip-target" href="#main-content-anchor">Skip to content</a>
+
+  <nav class="topnav" aria-label="Primary Navigation Matrix">
+    <div class="container inner-bar">
+      <a class="brand" href="#home">
+        <span class="indicator-dot" aria-hidden="true"></span>UpSkill Portfolio
+      </a>
+      <ul class="navlinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#labs">Labs</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#reflection">Reflection</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#resources">Resources</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content-anchor">
+
+    <header class="hero" id="home">
+      <div class="container hero-inner">
+        <img class="avatar-frame" src="images/profile.jpg" alt="Portrait photo of an A211477 software engineering student." />
+        <div class="hero-text">
+          <h1>Matric A211477</h1>
+          <p class="role-specification">Bachelor of Software Engineering · Mobile Programming e-Portfolio</p>
+          <p class="intro-paragraph">
+            I am a software engineering student specializing in architectural design patterns and local persistent data state caching. This e-Portfolio logs my technical laboratory milestones alongside my reverse-engineered learning ecosystem tracker, <strong>UpSkill</strong> — a production-grade Android application modeled after Udemy to democratize technical mastery.
+          </p>
+
+          <div class="meta-layout-grid">
+            <div class="meta-card-item"><span class="meta-label-tag">Matric No.</span><span class="meta-value-content">A211477</span></div>
+            <div class="meta-card-item"><span class="meta-label-tag">Programme</span><span class="meta-value-content">B. Software Engineering</span></div>
+            <div class="meta-card-item"><span class="meta-label-tag">Instructor</span><span class="meta-value-content">Dr. Nazatul Aini binti Abd Majid</span></div>
+            <div class="meta-card-item"><span class="meta-label-tag">Focus App</span><span class="meta-value-content">UpSkill Platform</span></div>
+          </div>
+
+          <div class="sdg-education-badge">
+            <span class="sdg-index-num">4</span>
+            SDG 4 — Quality Education: Accessible, responsive skill tracking, and offline digital content delivery must be placed in the hands of every aspiring student globally.
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="labs" aria-labelledby="labs-title">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="eyebrow-text">Coursework</span>
+          <h2 id="labs-title">Labs</h2>
+          <p>Five incremental Android development labs validating foundational mastery over Jetpack Compose elements, stateless abstraction, programmatic state hosting, and reactive architecture frameworks.</p>
+        </div>
+
+        <div class="grid-matrix">
+          <article class="showcase-card">
+            <div class="video-aspect-wrapper">
+              <iframe src="https://www.youtube.com/embed/O1vb_v7DFfA" title="Lab 1 — UI layout system verification tracking clip" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="card-body-content">
+              <span class="category-pill-tag">Lab 1 · UI Layouts</span>
+              <h3>Building the User Interface</h3>
+              <p class="description-text">Constructing structural card matrices and modular content feeds using declarative layout composition constraints.</p>
+              <figure class="ui-screenshot-frame">
+                <div class="image-centering-well"><img src="images/lab1.png" alt="UpSkill Lab 1 Home Dashboard view with native component trees." loading="lazy" /></div>
+                <figcaption><strong>Screenshot:</strong> UpSkill layout structure — Compose component maps displaying course feeds, category chips, and personalized layout headers.</figcaption>
+              </figure>
+              <p class="reflection-callout-block"><strong>Reflection:</strong> Re-engineering the primary navigation slots forced me to look at UI as functions of state rather than static XML boxes. I mastered programmatic constraint wrapping via Rows, Columns, and Box layers, discovering how modifier attributes handle scale better than absolute component dimensions.</p>
+              <a class="btn-action" href="https://github.com/dhizznutzz/A212605_Dhiren_DrNazatul_Lab01.git" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub
+              </a>
+            </div>
+          </article>
+
+          <article class="showcase-card">
+            <div class="video-aspect-wrapper">
+              <iframe src="https://youtu.be/am8MOyR-Dss" title="Lab 2 — Interface interaction and state handling loops validation clip" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="card-body-content">
+              <span class="category-pill-tag">Lab 2 · Interactions</span>
+              <h3>Handling State Mutation</h3>
+              <p class="description-text">Capturing real-time field mutations and intercepting user triggers inside the composition scope.</p>
+              <figure class="ui-screenshot-frame">
+                <div class="image-centering-well"><img src="images/lab2.png" alt="UpSkill Lab 2 responsive components mapping queries real-time." loading="lazy" /></div>
+                <figcaption><strong>Screenshot:</strong> Input observation — binding real-time text mutations directly into search parameters.</figcaption>
+              </figure>
+              <p class="reflection-callout-block"><strong>Reflection:</strong> This lab illuminated the mechanics of recomposition cycles using mutable state wrappers. Hoisting state structures upward allowed me to craft clean, immutable composables that separate UI rendering logic from data holding containers.</p>
+              <a class="btn-action" href="https://github.com/ariffahim-ctrl/A211477_Fahim_DrNazatul_Lab2" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub
+              </a>
+            </div>
+          </article>
+
+          <article class="showcase-card">
+            <div class="video-aspect-wrapper">
+              <iframe src="https://youtu.be/NhPyTCQ6qlE" title="Lab 3 — Material design core standard tokens integration verification clip" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="card-body-content">
+              <span class="category-pill-tag">Lab 3 · Material 3</span>
+              <h3>Applying Material Design 3 Tokens</h3>
+              <p class="description-text">Injecting standardized design tokens, contextual elevations, and fluid surface animations.</p>
+              <figure class="ui-screenshot-frame">
+                <div class="image-centering-well"><img src="images/lab3.png" alt="UpSkill localized theme architecture layout profile views." loading="lazy" /></div>
+                <figcaption><strong>Screenshot:</strong> High-fidelity components mapped to automated light/dark dynamic theme wrappers.</figcaption>
+              </figure>
+              <p class="reflection-callout-block"><strong>Reflection:</strong> Transitioning to full Material 3 typography and palette definitions eliminated arbitrary hex assignments. Implementing programmatic content adjustments like <code>animateContentSize()</code> established production-grade feedback layers across the course panels.</p>
+              <a class="btn-action" href="https://github.com/ariffahim-ctrl/A211477_Dr.Nazatul_lab3" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub
+              </a>
+            </div>
+          </article>
+
+          <article class="showcase-card">
+            <div class="video-aspect-wrapper">
+              <iframe src="https://youtu.be/NOFVEGCzu6I" title="Lab 4 — Multi screen navigation routing configurations validation clip" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="card-body-content">
+              <span class="category-pill-tag">Lab 4 · Navigation</span>
+              <h3>Multi-Screen Navigation Context</h3>
+              <p class="description-text">Formulating safe navigation destinations via structured state pipelines and lifecycle-conscious back-stacks.</p>
+              <figure class="ui-screenshot-frame">
+                <div class="image-centering-well"><img src="images/lab4.png" alt="UpSkill multi-screen graph and back stack management tracking." loading="lazy" /></div>
+                <figcaption><strong>Screenshot:</strong> Inter-screen context transitions mapping users across course screens cleanly.</figcaption>
+              </figure>
+              <p class="reflection-callout-block"><strong>Reflection:</strong> Encapsulating app routing parameters directly within clean Composable graphs proved critical. Forcing state to live strictly inside single ViewModels ensured that critical search states survive device orientation adjustments.</p>
+              <a class="btn-action" href="https://github.com/ariffahim-ctrl/A211477_Dr.Nazatul_lab4" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub
+              </a>
+            </div>
+          </article>
+
+          <article class="showcase-card">
+            <div class="video-aspect-wrapper">
+              <iframe src="https://youtu.be/E05zs1pkE6A" title="Lab 5 — Database caching layer and transaction flow isolation monitoring clip" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="card-body-content">
+              <span class="category-pill-tag">Lab 5 · Persistence</span>
+              <h3>Local Storage Architecture (Room)</h3>
+              <p class="description-text">Engineering an offline storage layout with Room DAOs and StateFlow asynchronous data tracking pipelines.</p>
+              <figure class="ui-screenshot-frame">
+                <div class="image-centering-well"><img src="images/lab5.png" alt="UpSkill Local persistence transaction validations." loading="lazy" /></div>
+                <figcaption><strong>Screenshot:</strong> Skill Locker integration — background insertion tasks executing inside offline storage tables.</figcaption>
+              </figure>
+              <p class="reflection-callout-block"><strong>Reflection:</strong> Lab 5 tied our app architecture cleanly into MVVM structures. Mapping the Room entities alongside specific DAOs delivering active Kotlin StateFlow streams taught me how to handle true offline local synchronization without freezing interface threads.</p>
+              <a class="btn-action" href="https://github.com/ariffahim-ctrl/A211477_Dr.Nazatul_lab5" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" aria-labelledby="projects-title">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="eyebrow-text">Capstone</span>
+          <h2 id="projects-title">Projects</h2>
+          <p>Two distinct product iterations of <strong>UpSkill</strong> — scaling from an in-memory UI container prototype into a full-stack asynchronous platform.</p>
+        </div>
+
+        <div class="grid-matrix">
+          <article class="showcase-card">
+            <div class="video-aspect-wrapper">
+              <iframe src="https://youtu.be/QHafPa-xm7k" title="Project 1 — UpSkill UI processing systems status verification submission clip" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="card-body-content">
+              <span class="category-pill-tag">Project 1 · Core Framework</span>
+              <h3>UpSkill Core System</h3>
+              <p class="description-text"><strong>Problem Statement:</strong> Traditional technical training access patterns inside Malaysia face extreme optimization gaps; tracking learning progress and verifying structured training milestones remains deeply fragmented, restricting growth targets under **SDG 4: Quality Education**. UpSkill resolves this friction by introducing an structured multi-pane training dashboard ecosystem that maps personal metrics and encapsulates local progress trackers inside a cleanly decoupled runtime architecture.</p>
+              <p class="reflection-callout-block"><strong>Lessons learned:</strong> Project 1 focused on building state integrity without data caching support. Coordinating five distinct viewing modules via unified ViewModel classes taught me how to cleanly route nested user actions using pure declarative navigation states.</p>
+              <a class="btn-action" href="https://github.com/ariffahim-ctrl/A211477_Dr.Nazatul_Project1" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub
+              </a>
+            </div>
+          </article>
+
+          <article class="showcase-card">
+            <div class="video-aspect-wrapper">
+              <iframe src="https://www.youtube.com/embed/jGDGfOIro-0" title="Project 2 — UpSkill full system execution overview submission clip" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="card-body-content">
+              <span class="category-pill-tag">Project 2 · Sensor + Cloud + API</span>
+              <h3>UpSkill Connected Platform</h3>
+              <p class="description-text"><strong>Problem Statement:</strong> Static interfaces fail to replicate the dynamic requirements of industry-level engineering platforms. Education must connect smoothly with real-time variables. This iteration builds a powerful production pipeline by linking a live external technical reading feed via Retrofit Web APIs, an edge Camera X hardware promotion code scanner sensor, and permanent Room local database structures to back up student profile data fully offline.</p>
+              <p class="reflection-callout-block"><strong>Lessons learned:</strong> Orchestrating background camera streams concurrently alongside remote network parsing tools taught me how to safely manage asynchronous task routines using structured Kotlin Coroutine thread parameters.</p>
+              <a class="btn-action" href="https://github.com/A212605MobileProgramming/A212605_Dhiren_DrNazatul_Project2.git" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflection" aria-labelledby="reflection-title">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="eyebrow-text">Synthesis</span>
+          <h2 id="reflection-title">Course Reflection</h2>
+          <p>An overview of technical and architectural growth gained throughout this mobile programming track.</p>
+        </div>
+        <div class="prose-reading-well">
+          <p>
+            Developing the <strong>UpSkill</strong> platform from scratch highlighted the value of clear design separations. Moving away from standard imperative Android views toward the modern <strong>Jetpack Compose declarative framework</strong> reshaped how I plan application lifecycles. I learned to structure systems by treating UI profiles simply as predictable outputs of defined input states.
+          </p>
+          <p>
+            The core technical challenge emerged during Project 2's synchronization phase—ensuring the hardware camera analyzer loop pass parameters to background Web endpoints without introducing interface hitching. Overcoming these thread constraints via structured Kotlin Coroutines provided foundational skills directly applicable to enterprise application design.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="eyebrow-text">Competencies</span>
+          <h2 id="skills-title">Technical Expertise</h2>
+          <p>Core development frameworks, patterns, and architectural systems validated across labs and projects.</p>
+        </div>
+        <div class="skills-chip-cloud">
+          <span class="chip-item">Kotlin Coroutines &amp; Asynchronous Flows</span>
+          <span class="chip-item">Jetpack Compose Declarative UI Engine</span>
+          <span class="chip-item">MVVM Architecture Design Patterns</span>
+          <span class="chip-item">Room Persistence Layer Mapping</span>
+          <span class="chip-item">CameraX Sensor Interception API</span>
+          <span class="chip-item">Retrofit RESTful Payload Processing</span>
+          <span class="chip-item">Material 3 UI Adaptive Layout Tokenization</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="resources" aria-labelledby="resources-title">
+      <div class="container">
+        <div class="section-header-block">
+          <span class="eyebrow-text">References</span>
+          <h2 id="resources-title">Development Documentation</h2>
+          <p>Primary specifications, engineering manuals, and baseline standards leveraged to build this software pipeline.</p>
+        </div>
+        <ul class="documentation-reference-list">
+          <li><strong>Google Android Developer Guides:</strong> Core specification reference for Jetpack Compose state tracking loops and architecture design models.</li>
+          <li><strong>CameraX API Guidelines:</strong> Implementation blueprint for thread-isolated image analysis loops and hardware device bindings.</li>
+          <li><strong>Kotlin Coroutines Documentation:</strong> System architecture specifications for managing asynchronous data flows and context switching.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="system-footer">
+    <div class="container">
+      <p class="institutional-identity">Matric A211477 · UpSkill Engineering Portfolio</p>
+      <p class="departmental-attribution">Faculty of Information Science and Technology (FST) · Universiti Kebangsaan Malaysia (UKM)</p>
+    </div>
+  </footer>
+
+</body>
+</html>
